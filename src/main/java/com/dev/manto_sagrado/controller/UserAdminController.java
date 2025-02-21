@@ -4,6 +4,7 @@ import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminRequestDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserLoginResponseDTO;
 import com.dev.manto_sagrado.service.UserAdminService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,12 @@ public class UserAdminController {
     @GetMapping
     public ResponseEntity<List<UserAdminResponseDTO>> listAll() {
         return ResponseEntity.ok().body(service.listAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> save(@Valid @RequestBody UserAdminRequestDTO data) {
+        boolean inserted = service.save(UserAdminRequestDTO.newUserAdmin(data));
+        return inserted ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/login")
