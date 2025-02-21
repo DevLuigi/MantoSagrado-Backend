@@ -6,14 +6,14 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserAdminResponseDTO {
+public class UserLoginResponseDTO {
     private long id;
     private String name;
     private String email;
     private String password;
 
-    public static UserAdminResponseDTO fromUserAdmin(UserAdmin user) {
-        return UserAdminResponseDTO.builder()
+    public static UserLoginResponseDTO fromUserAdmin(UserAdmin user) {
+        return UserLoginResponseDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())

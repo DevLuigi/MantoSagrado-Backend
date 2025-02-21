@@ -11,11 +11,15 @@ import lombok.NoArgsConstructor;
 public class UserAdminRequestDTO {
     private long id;
     private String name;
+    private String email;
+    private String password;
 
     public static UserAdmin newUserAdmin(UserAdminRequestDTO user) {
         return UserAdmin.builder()
                 .id(user.getId())
                 .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
                 .build();
     }
 }

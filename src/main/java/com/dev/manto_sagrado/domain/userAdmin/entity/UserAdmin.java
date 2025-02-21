@@ -1,6 +1,7 @@
 package com.dev.manto_sagrado.domain.userAdmin.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -17,4 +18,10 @@ public class UserAdmin {
 
     @NotBlank(message = "Nome deve ser preenchido")
     private String name;
+
+    @Email @NotBlank(message = "Email deve ser preenchido")
+    private String email;
+
+    @NotBlank
+    private String password;
 }
