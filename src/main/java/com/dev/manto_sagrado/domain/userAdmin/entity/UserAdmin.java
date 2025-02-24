@@ -1,6 +1,7 @@
 package com.dev.manto_sagrado.domain.userAdmin.entity;
 
 import com.dev.manto_sagrado.domain.userAdmin.Enum.Group;
+import com.dev.manto_sagrado.domain.userAdmin.Enum.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,4 +34,8 @@ public class UserAdmin {
 
     @NotNull
     private String cpf;
+
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    private Status status;
 }
