@@ -1,5 +1,7 @@
 package com.dev.manto_sagrado.domain.userAdmin.dto;
 
+import com.dev.manto_sagrado.domain.userAdmin.Enum.Group;
+import com.dev.manto_sagrado.domain.userAdmin.Enum.Status;
 import com.dev.manto_sagrado.domain.userAdmin.entity.UserAdmin;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +13,9 @@ public class UserLoginResponseDTO {
     private String name;
     private String email;
     private String password;
+    private Group userGroup;
+    private String cpf;
+    private Status status;
 
     public static UserLoginResponseDTO fromUserAdmin(UserAdmin user) {
         return UserLoginResponseDTO.builder()
@@ -18,6 +23,9 @@ public class UserLoginResponseDTO {
                 .name(user.getName())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .userGroup(user.getUserGroup())
+                .cpf(user.getCpf())
+                .status(user.getStatus())
                 .build();
     }
 }

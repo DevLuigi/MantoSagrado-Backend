@@ -1,10 +1,13 @@
 package com.dev.manto_sagrado.service;
 
+import com.dev.manto_sagrado.domain.userAdmin.Enum.Group;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminRequestDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserLoginResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.entity.UserAdmin;
 import com.dev.manto_sagrado.repository.UserAdminRepository;
+import org.apache.catalina.User;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,5 +49,37 @@ public class UserAdminService {
         if (!encoder.matches(request.getPassword(), user.getPassword())) return null;
 
         return UserLoginResponseDTO.fromUserAdmin(user);
+    }
+
+    public Optional<UserAdmin> updateById(long id, UserAdminRequestDTO data) {
+        if (!repository.existsById(id)) return Optional.empty();
+        if (!repository.existsById(data.getId())) return Optional.empty();
+
+        UserAdmin userAdmin = repository.findById(id).get();
+        if (!userAdmin.getUserGroup().equals(Group.ADMIN)) {
+            return Optional.empty();
+        }
+
+        UserAdmin user;
+        if (userAdmin.getId() == data.getId()) {
+            user = updateAll(data, userAdmin);
+        } else {
+             user = updateGroup(data);
+        }
+
+        return Optional.of(repository.save(user));
+    }
+
+    public UserAdmin updateAll(UserAdminRequestDTO data, UserAdmin oldUser) {
+        UserAdmin userUpdated = UserAdminRequestDTO.newUserAdmin(data);
+        userUpdated.setEmail(oldUser.getEmail()); // ensure the email will not be changed
+        userUpdated.setPassword(encoder.encode(data.getPassword()));
+        return userUpdated;
+    }
+
+    public UserAdmin updateGroup(UserAdminRequestDTO data) {
+        UserAdmin user = repository.findById(data.getId()).get();
+        user.setUserGroup(data.getUserGroup());
+        return user;
     }
 }
