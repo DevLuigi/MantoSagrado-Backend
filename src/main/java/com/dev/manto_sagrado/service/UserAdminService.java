@@ -56,16 +56,15 @@ public class UserAdminService {
         if (!repository.existsById(id)) return Optional.empty();
         if (!repository.existsById(data.getId())) return Optional.empty();
 
-        UserAdmin userAdmin = repository.findById(id).get();
-        if (!userAdmin.getUserGroup().equals(Group.ADMIN)) {
+        UserAdmin user = repository.findById(id).get();
+        if (!user.getUserGroup().equals(Group.ADMIN)) {
             return Optional.empty();
         }
 
-        UserAdmin user;
-        if (userAdmin.getId() == data.getId()) {
-            user = updateAll(data, userAdmin);
+        if (user.getId() == data.getId()) {
+            user = updateAll(data, user);
         } else {
-             user = updateGroup(data);
+            user = updateGroup(data);
         }
 
         return Optional.of(repository.save(user));
@@ -83,6 +82,7 @@ public class UserAdminService {
         user.setUserGroup(data.getUserGroup());
         return user;
     }
+  
     public Optional<UserAdmin> handleStatusById(long id){
         if (!repository.existsById(id)) return Optional.empty();
         UserAdmin user = repository.findById(id).get();
