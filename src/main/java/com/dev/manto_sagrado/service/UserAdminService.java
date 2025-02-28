@@ -82,7 +82,7 @@ public class UserAdminService {
         user.setUserGroup(data.getUserGroup());
         return user;
     }
-
+  
     public Optional<UserAdmin> handleStatusById(long id){
         if (!repository.existsById(id)) return Optional.empty();
         UserAdmin user = repository.findById(id).get();

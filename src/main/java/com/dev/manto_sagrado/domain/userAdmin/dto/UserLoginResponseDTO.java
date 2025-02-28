@@ -10,22 +10,14 @@ import lombok.Data;
 @Builder
 public class UserLoginResponseDTO {
     private long id;
-    private String name;
     private String email;
-    private String password;
     private Group userGroup;
-    private String cpf;
-    private Status status;
 
     public static UserLoginResponseDTO fromUserAdmin(UserAdmin user) {
         return UserLoginResponseDTO.builder()
                 .id(user.getId())
-                .name(user.getName())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .userGroup(user.getUserGroup())
-                .cpf(user.getCpf())
-                .status(user.getStatus())
                 .build();
     }
 }

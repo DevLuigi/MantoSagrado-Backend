@@ -41,13 +41,11 @@ public class UserAdminController {
         Optional<UserAdmin> user = service.updateById(id, data);
         return user.isPresent() ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
-<<<<<<< Updated upstream
-=======
-
+  
     @PutMapping("/{userId}/status")
     public ResponseEntity<Void> updateById(@PathVariable("userId") long id){
         Optional<UserAdmin> user = service.handleStatusById(id);
         return user.isPresent() ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
->>>>>>> Stashed changes
+  
 }
