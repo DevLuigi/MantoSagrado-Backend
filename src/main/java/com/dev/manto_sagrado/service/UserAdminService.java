@@ -1,6 +1,7 @@
 package com.dev.manto_sagrado.service;
 
 import com.dev.manto_sagrado.domain.userAdmin.Enum.Group;
+import com.dev.manto_sagrado.domain.userAdmin.Enum.Status;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminRequestDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserLoginResponseDTO;
@@ -55,16 +56,15 @@ public class UserAdminService {
         if (!repository.existsById(id)) return Optional.empty();
         if (!repository.existsById(data.getId())) return Optional.empty();
 
-        UserAdmin userAdmin = repository.findById(id).get();
-        if (!userAdmin.getUserGroup().equals(Group.ADMIN)) {
+        UserAdmin user = repository.findById(id).get();
+        if (!user.getUserGroup().equals(Group.ADMIN)) {
             return Optional.empty();
         }
 
-        UserAdmin user;
-        if (userAdmin.getId() == data.getId()) {
-            user = updateAll(data, userAdmin);
+        if (user.getId() == data.getId()) {
+            user = updateAll(data, user);
         } else {
-             user = updateGroup(data);
+            user = updateGroup(data);
         }
 
         return Optional.of(repository.save(user));
@@ -81,5 +81,18 @@ public class UserAdminService {
         UserAdmin user = repository.findById(data.getId()).get();
         user.setUserGroup(data.getUserGroup());
         return user;
+    }
+
+    public Optional<UserAdmin> handleStatusById(long id){
+        if (!repository.existsById(id)) return Optional.empty();
+        UserAdmin user = repository.findById(id).get();
+
+        if(user.getStatus() .equals(Status.ATIVADO)){
+            user.setStatus(Status.DESATIVADO);
+        }
+        else {
+            user.setStatus(Status.ATIVADO);
+        }
+        return Optional.of(repository.save(user));
     }
 }
