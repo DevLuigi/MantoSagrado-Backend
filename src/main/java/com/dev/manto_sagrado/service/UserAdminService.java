@@ -6,9 +6,10 @@ import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminRequestDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserLoginResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.entity.UserAdmin;
+import com.dev.manto_sagrado.exception.InvalidCpfException;
+import com.dev.manto_sagrado.exception.UserDeactivatedException;
+import com.dev.manto_sagrado.infrastructure.utils.CpfValidator;
 import com.dev.manto_sagrado.repository.UserAdminRepository;
-import org.apache.catalina.User;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class UserAdminService {
     public boolean save(UserAdmin user) {
         if (repository.findByEmail(user.getEmail()).isPresent()) return false;
 
+        if(!CpfValidator.isValid(user.getCpf()))
+            throw new InvalidCpfException("CPF inválido");
+
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
 
@@ -43,10 +47,12 @@ public class UserAdminService {
 
     public UserLoginResponseDTO login(UserAdminRequestDTO request) {
         Optional<UserAdmin> userByEmail = repository.findByEmail(request.getEmail());
-
         if (userByEmail.isEmpty()) return null;
 
         UserAdmin user = userByEmail.get();
+        if(user.getStatus().equals(Status.DESATIVADO))
+            throw new UserDeactivatedException("Usuário está desativado e não pode fazer login.");
+
         if (!encoder.matches(request.getPassword(), user.getPassword())) return null;
 
         return UserLoginResponseDTO.fromUserAdmin(user);
@@ -55,6 +61,9 @@ public class UserAdminService {
     public Optional<UserAdmin> updateById(long id, UserAdminRequestDTO data) {
         if (!repository.existsById(id)) return Optional.empty();
         if (!repository.existsById(data.getId())) return Optional.empty();
+
+        if(!CpfValidator.isValid(data.getCpf()))
+            throw new InvalidCpfException("CPF inválido");
 
         UserAdmin user = repository.findById(id).get();
         if (!user.getUserGroup().equals(Group.ADMIN)) {
