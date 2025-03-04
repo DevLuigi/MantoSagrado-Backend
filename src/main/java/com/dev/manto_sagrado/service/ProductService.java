@@ -40,15 +40,7 @@ public class ProductService {
         Product product = repository.findById(id).get();
         if (product.getId() != data.getId()) return Optional.empty();
 
-        product.setName(data.getName());
-        product.setTeamName(data.getTeamName());
-        product.setSeason(data.getSeason());
-        product.setKitType(data.getKitType());
-        product.setBrand(data.getBrand());
-        product.setDescription(data.getDescription());
-        product.setQuantity(data.getQuantity());
-        product.setPrice(data.getPrice());
-        product.setStatus(data.getStatus());
+        product = ProductRequestDTO.newProduct(data);
 
         if (!ProductValidator.isValid(product))
             throw new InvalidProductException("Produto inválido");
