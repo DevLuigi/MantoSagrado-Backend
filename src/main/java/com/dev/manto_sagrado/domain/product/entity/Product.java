@@ -31,7 +31,7 @@ public class Product {
     private String season;
 
     @NotNull(message = "Tipo de uniforme deve ser preenchido")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private KitType kitType;
 
     @NotNull(message = "Marca deve ser preenchida")

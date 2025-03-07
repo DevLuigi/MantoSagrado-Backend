@@ -26,4 +26,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGenericException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Um erro inesperado aconteceu.");
     }
+
+    // Lida com exceção de produto
+    @ExceptionHandler(InvalidProductException.class)
+    public ResponseEntity<String> handleInvalidProductException(InvalidProductException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
 }
