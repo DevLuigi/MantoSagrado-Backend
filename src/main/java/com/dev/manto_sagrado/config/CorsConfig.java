@@ -1,4 +1,4 @@
-package com.dev.manto_sagrado.security;
+package com.dev.manto_sagrado.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

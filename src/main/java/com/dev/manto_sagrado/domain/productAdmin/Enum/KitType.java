@@ -1,4 +1,4 @@
-package com.dev.manto_sagrado.domain.product.Enum;
+package com.dev.manto_sagrado.domain.productAdmin.Enum;
 
 public enum KitType {
     HOME,

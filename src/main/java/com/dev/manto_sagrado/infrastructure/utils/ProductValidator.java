@@ -1,7 +1,7 @@
 package com.dev.manto_sagrado.infrastructure.utils;
 
-import com.dev.manto_sagrado.domain.product.entity.Product;
-import com.dev.manto_sagrado.repository.ProductsRepository;
+import com.dev.manto_sagrado.domain.productAdmin.entity.ProductAdmin;
+import com.dev.manto_sagrado.repository.ProductsAdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ProductValidator {
 
-    private ProductsRepository repository;
+    private ProductsAdminRepository repository;
 
-    public static boolean isValid(Product product) {
+    public static boolean isValid(ProductAdmin product) {
         if (product == null) return false;
 
         if (product.getName() == null || product.getName().trim().isEmpty()) return false;
@@ -32,7 +32,8 @@ public class ProductValidator {
 
         if (product.getStatus() == null) return false;
 
-//        return !repository.existsByNameAndSeasonAndKitType(product.getName(), product.getSeason(), product.getKitType());
+        if(product.getEvaluation() == null) return  false;
+
         return true;
     }
 }
