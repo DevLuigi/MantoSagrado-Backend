@@ -1,9 +1,12 @@
-package com.dev.manto_sagrado.domain.product.entity;
+package com.dev.manto_sagrado.domain.productAdmin.entity;
 
-import com.dev.manto_sagrado.domain.product.Enum.KitType;
-import com.dev.manto_sagrado.domain.product.Enum.Status;
+import com.dev.manto_sagrado.domain.productAdmin.Enum.KitType;
+import com.dev.manto_sagrado.domain.productAdmin.Enum.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -17,10 +20,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
-public class Product {
+public class ProductAdmin {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Size(max = 200, message = "O nome não pode ter mais de 200 caracteres")
     @NotNull(message = "Nome deve ser preenchido")
     private String name;
 
@@ -37,6 +41,7 @@ public class Product {
     @NotNull(message = "Marca deve ser preenchida")
     private String brand;
 
+    @Size(max = 2000, message = "A descrição não pode ter mais de 2000 caracteres")
     @NotNull(message = "Descrição deve ser preenchida")
     private String description;
 
@@ -53,4 +58,7 @@ public class Product {
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
+
+    @Min(1) @Max(5) @NotNull(message = "Avaliação deve ser preenchida")
+    private Double evaluation;
 }

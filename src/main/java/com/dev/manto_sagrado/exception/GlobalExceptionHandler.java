@@ -1,6 +1,5 @@
 package com.dev.manto_sagrado.exception;
 
-import com.dev.manto_sagrado.exception.UserDeactivatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,5 +30,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidProductException.class)
     public ResponseEntity<String> handleInvalidProductException(InvalidProductException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    // Lida com produto não encontrado
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // Lida com falha ao usar metodo InputStream da imagem
+    @ExceptionHandler(InputStreamException.class)
+    public ResponseEntity<String> handleInputStreamException(InputStreamException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
+
+    // Lida com imagem não encontrada
+    @ExceptionHandler(ImageNotFoundException.class)
+    public ResponseEntity<String> handleImageNotFoundException(ImageNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
