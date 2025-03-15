@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface ProductsImageAdminRepository extends JpaRepository<ProductImageAdmin, Long> {
     Optional<List<ProductImageAdmin>> findAllByProduct(ProductAdmin product);
+    int deleteAllByProduct(ProductAdmin product);
 }

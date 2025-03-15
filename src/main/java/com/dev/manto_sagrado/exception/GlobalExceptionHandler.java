@@ -45,8 +45,8 @@ public class GlobalExceptionHandler {
     }
 
     // Lida com imagem não encontrada
-    @ExceptionHandler(ImageNotFoundException.class)
-    public ResponseEntity<String> handleImageNotFoundException(ImageNotFoundException ex) {
+    @ExceptionHandler(ImagesNotFoundException.class)
+    public ResponseEntity<String> handleImageNotFoundException(ImagesNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
