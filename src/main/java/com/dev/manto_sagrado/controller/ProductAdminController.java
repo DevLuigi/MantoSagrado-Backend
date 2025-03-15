@@ -2,11 +2,14 @@ package com.dev.manto_sagrado.controller;
 
 import com.dev.manto_sagrado.domain.productAdmin.dto.ProductAdminRequestDTO;
 import com.dev.manto_sagrado.domain.productAdmin.dto.ProductAdminResponseDTO;
+import com.dev.manto_sagrado.domain.productAdmin.dto.ProductImageAdminResponseDTO;
 import com.dev.manto_sagrado.domain.productAdmin.entity.ProductAdmin;
 import com.dev.manto_sagrado.domain.productAdmin.entity.ProductImageAdmin;
 import com.dev.manto_sagrado.service.ProductAdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,9 +36,9 @@ public class ProductAdminController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Void> updateById(@PathVariable("productId") long id, @Valid @RequestBody ProductAdminRequestDTO data) {
-        Optional<ProductAdmin> product = service.updateById(id, data);
-        return product.isPresent() ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<ProductAdminResponseDTO> updateById(@PathVariable("productId") long id, @Valid @RequestBody ProductAdminRequestDTO data) {
+        Optional<ProductAdminResponseDTO> product = service.updateById(id, data);
+        return product.isPresent() ? ResponseEntity.ok().body(product.get()) : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{productId}/status")
@@ -45,14 +48,19 @@ public class ProductAdminController {
     }
 
     @GetMapping("/{productId}/image")
-    public ResponseEntity<Optional<List<ProductImageAdmin>>> listAllImages(@PathVariable Long productId) {
-        Optional<List<ProductImageAdmin>> images = service.listAllImages(productId);
-        return images.isPresent() ? ResponseEntity.ok().body(images) : ResponseEntity.notFound().build();
+    public ResponseEntity<List<ProductImageAdminResponseDTO>> listAllImagesByProduct(@PathVariable Long productId) {
+        List<ProductImageAdminResponseDTO> images = service.listAllImagesByProduct(productId);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(images);
     }
 
     @PostMapping("/{productId}/image/isMain/{isMain}")
     public ResponseEntity<Void> saveImage(@PathVariable Long productId, @PathVariable Boolean isMain, @RequestParam("file") MultipartFile file) {
         Optional<ProductImageAdmin> image = service.saveImage(productId, isMain, file);
         return image.isPresent() ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @DeleteMapping("/{productId}/image")
+    public ResponseEntity<Void> deleteAllImagesByProduct(@PathVariable Long productId) {
+        return service.deleteAllImagesByProduct(productId) ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }

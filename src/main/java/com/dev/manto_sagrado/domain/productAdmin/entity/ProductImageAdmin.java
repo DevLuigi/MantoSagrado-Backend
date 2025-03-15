@@ -21,5 +21,8 @@ public class ProductImageAdmin {
     private String imagePath;
 
     @NonNull
+    private String fileName;
+
+    @NonNull
     private Boolean isMain;
 }
