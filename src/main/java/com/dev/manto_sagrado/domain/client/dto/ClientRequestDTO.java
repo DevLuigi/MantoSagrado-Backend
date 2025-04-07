@@ -1,15 +1,17 @@
-package com.dev.manto_sagrado.domain.user.dto;
+package com.dev.manto_sagrado.domain.client.dto;
 
-import com.dev.manto_sagrado.domain.user.Enum.Gender;
-import com.dev.manto_sagrado.domain.user.entity.User;
-import lombok.Builder;
-import lombok.Data;
+import com.dev.manto_sagrado.domain.client.Enum.Gender;
+import com.dev.manto_sagrado.domain.client.entity.Client;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
-@Builder
-public class UserResponseDTO {
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ClientRequestDTO {
     private long id;
     private String email;
     private String password;
@@ -19,8 +21,8 @@ public class UserResponseDTO {
     private LocalDate birthDate;
     private Gender gender;
 
-    public static UserResponseDTO fromUser(User user) {
-        return UserResponseDTO.builder()
+    public static Client newUser(ClientRequestDTO user) {
+        return Client.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())

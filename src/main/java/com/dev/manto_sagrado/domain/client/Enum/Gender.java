@@ -1,4 +1,4 @@
-package com.dev.manto_sagrado.domain.user.Enum;
+package com.dev.manto_sagrado.domain.client.Enum;
 
 public enum Gender {
     MASCULINO,

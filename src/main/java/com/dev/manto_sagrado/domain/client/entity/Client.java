@@ -1,6 +1,6 @@
-package com.dev.manto_sagrado.domain.user.entity;
+package com.dev.manto_sagrado.domain.client.entity;
 
-import com.dev.manto_sagrado.domain.user.Enum.Gender;
+import com.dev.manto_sagrado.domain.client.Enum.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
-public class User {
+public class Client {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
