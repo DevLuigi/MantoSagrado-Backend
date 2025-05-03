@@ -28,7 +28,7 @@ public class OrderController {
     @Autowired
     private OrderItemsService orderItemsService;
 
-    @GetMapping
+    @PostMapping("/list-all-by-client")
     public ResponseEntity<List<OrderResponseDTO>> listAllByClient(@RequestBody ClientRequestDTO data) {
         return ResponseEntity.ok().body(orderService.listAllByClient(data));
     }
@@ -39,7 +39,7 @@ public class OrderController {
         return inserted.isPresent() ? ResponseEntity.ok().body(inserted.get()) : ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/items")
+    @PostMapping("/items/list-all-by-order")
     public ResponseEntity<List<OrderItemsResponseDTO>> listAllByOrder(@RequestBody OrderRequestDTO data) {
         return ResponseEntity.ok().body(orderItemsService.listAllByOrder(data));
     }
