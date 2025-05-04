@@ -64,6 +64,12 @@ public class ClientController {
         return addresses.isPresent() ? ResponseEntity.ok().body(addresses) : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/{clientId}/address/delivery")
+    public ResponseEntity<Optional<List<Address>>> listAllByClientAndDelivery(@PathVariable("clientId") long clientId) {
+        Optional<List<Address>> addresses = service.listAllAddressesByClientAndDelivery(clientId);
+        return addresses.isPresent() ? ResponseEntity.ok().body(addresses) : ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/{clientId}/address/{addressId}")
     public ResponseEntity<Void> updateAddressById(@PathVariable("addressId") long addressId, @PathVariable("clientId") long clientId) {
         Optional<Address> address = service.updateAddressById(addressId, clientId);
