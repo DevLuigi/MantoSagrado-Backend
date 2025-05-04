@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAll();
     List<Order> findAllByClient(Client client);
+
+    Order findByIdAndClient(Long id, Client client);
 }

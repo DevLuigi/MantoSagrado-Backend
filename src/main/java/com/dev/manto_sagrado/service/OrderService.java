@@ -8,6 +8,7 @@ import com.dev.manto_sagrado.domain.order.entity.Order;
 import com.dev.manto_sagrado.domain.orderItems.dto.OrderItemsRequestDTO;
 import com.dev.manto_sagrado.domain.orderItems.dto.OrderItemsResponseDTO;
 import com.dev.manto_sagrado.domain.orderItems.entity.OrderItems;
+import com.dev.manto_sagrado.repository.ClientRepository;
 import com.dev.manto_sagrado.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class OrderService {
     @Autowired
     private OrderRepository repository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     public List<OrderResponseDTO> listAllByClient(ClientRequestDTO client) {
         return repository.findAllByClient(ClientRequestDTO.newUser(client))
                 .stream()
@@ -34,4 +38,10 @@ public class OrderService {
         return Optional.of(OrderResponseDTO.fromOrder(repository.save(OrderRequestDTO.newOrder(order))));
     }
 
+    public Optional<OrderResponseDTO> findByClientAndOrder(long clientId, long orderId) {
+        if (!repository.existsById(orderId) && !clientRepository.existsById(clientId)) return Optional.empty();
+
+        Client client = clientRepository.findById(clientId).get();
+        return Optional.of(OrderResponseDTO.fromOrder(repository.findByIdAndClient(orderId, client)));
+    }
 }

@@ -33,6 +33,11 @@ public class OrderController {
         return ResponseEntity.ok().body(orderService.listAllByClient(data));
     }
 
+    @PostMapping("/{orderId}/client/{clientId}")
+    public ResponseEntity<Optional<OrderResponseDTO>> findByClientAndOrder(@PathVariable("clientId") long clientId, @PathVariable("orderId") long orderId){
+        return ResponseEntity.ok().body(orderService.findByClientAndOrder(clientId, orderId));
+    }
+
     @PostMapping
     public ResponseEntity<OrderResponseDTO> save(@Valid @RequestBody OrderRequestDTO data) {
         Optional<OrderResponseDTO> inserted = orderService.save(data);
