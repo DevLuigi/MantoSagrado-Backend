@@ -109,6 +109,11 @@ public class ClientService {
         return Optional.of(addressRepository.findAllByClient(repository.findById(idClient).get()));
     }
 
+    public Optional<List<Address>> listAllAddressesByClientAndDelivery(long idClient) {
+        if (!repository.existsById(idClient)) return Optional.empty();
+        return Optional.of(addressRepository.findAllByClientAndType(repository.findById(idClient).get(), AddressType.ENTREGA));
+    }
+
     public Optional<Address> updateAddressById(long addressId, long clientId) {
         if (!addressRepository.existsById(addressId)) {
             throw new AddressNotFoundException("Endereço não encontrado");
