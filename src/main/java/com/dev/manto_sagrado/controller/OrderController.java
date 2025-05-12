@@ -2,8 +2,10 @@ package com.dev.manto_sagrado.controller;
 
 import com.dev.manto_sagrado.domain.client.dto.ClientRequestDTO;
 import com.dev.manto_sagrado.domain.client.entity.Client;
+import com.dev.manto_sagrado.domain.order.Enum.Status;
 import com.dev.manto_sagrado.domain.order.dto.OrderRequestDTO;
 import com.dev.manto_sagrado.domain.order.dto.OrderResponseDTO;
+import com.dev.manto_sagrado.domain.order.dto.OrderStatusDTO;
 import com.dev.manto_sagrado.domain.orderItems.dto.OrderItemsRequestDTO;
 import com.dev.manto_sagrado.domain.orderItems.dto.OrderItemsResponseDTO;
 import com.dev.manto_sagrado.domain.productAdmin.dto.ProductAdminRequestDTO;
@@ -28,6 +30,11 @@ public class OrderController {
     @Autowired
     private OrderItemsService orderItemsService;
 
+    @GetMapping()
+    public ResponseEntity<List<OrderResponseDTO>> listAll() {
+        return ResponseEntity.ok().body(orderService.listAll());
+    }
+
     @PostMapping("/list-all-by-client")
     public ResponseEntity<List<OrderResponseDTO>> listAllByClient(@RequestBody ClientRequestDTO data) {
         return ResponseEntity.ok().body(orderService.listAllByClient(data));
@@ -42,6 +49,12 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> save(@Valid @RequestBody OrderRequestDTO data) {
         Optional<OrderResponseDTO> inserted = orderService.save(data);
         return inserted.isPresent() ? ResponseEntity.ok().body(inserted.get()) : ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable("orderId") long orderId, @RequestBody OrderStatusDTO status) {
+        Optional<OrderResponseDTO> order = orderService.updateOrderStatus(orderId, status.getStatus());
+        return order.map(orderResponseDTO -> ResponseEntity.ok().body(orderResponseDTO)).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @PostMapping("/items/list-all-by-order")

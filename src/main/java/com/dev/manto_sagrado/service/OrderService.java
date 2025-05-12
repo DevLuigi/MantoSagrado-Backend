@@ -2,8 +2,10 @@ package com.dev.manto_sagrado.service;
 
 import com.dev.manto_sagrado.domain.client.dto.ClientRequestDTO;
 import com.dev.manto_sagrado.domain.client.entity.Client;
+import com.dev.manto_sagrado.domain.order.Enum.Status;
 import com.dev.manto_sagrado.domain.order.dto.OrderRequestDTO;
 import com.dev.manto_sagrado.domain.order.dto.OrderResponseDTO;
+import com.dev.manto_sagrado.domain.order.dto.OrderStatusDTO;
 import com.dev.manto_sagrado.domain.order.entity.Order;
 import com.dev.manto_sagrado.domain.orderItems.dto.OrderItemsRequestDTO;
 import com.dev.manto_sagrado.domain.orderItems.dto.OrderItemsResponseDTO;
@@ -27,6 +29,10 @@ public class OrderService {
     @Autowired
     private ClientRepository clientRepository;
 
+    public List<OrderResponseDTO> listAll() {
+        return repository.findAllByOrderByCreatedAtDesc().stream().map(OrderResponseDTO::fromOrder).toList();
+    }
+
     public List<OrderResponseDTO> listAllByClient(ClientRequestDTO client) {
         return repository.findAllByClient(ClientRequestDTO.newUser(client))
                 .stream()
@@ -36,6 +42,16 @@ public class OrderService {
 
     public Optional<OrderResponseDTO> save(OrderRequestDTO order) {
         return Optional.of(OrderResponseDTO.fromOrder(repository.save(OrderRequestDTO.newOrder(order))));
+    }
+
+    @Transactional
+    public Optional<OrderResponseDTO> updateOrderStatus(long orderId, Status status) {
+        if (!repository.existsById(orderId)) return Optional.empty();
+
+        Order order = repository.findById(orderId).get();
+        order.setStatus(status);
+
+        return Optional.of(OrderResponseDTO.fromOrder(repository.save(order)));
     }
 
     public Optional<OrderResponseDTO> findByClientAndOrder(long clientId, long orderId) {
