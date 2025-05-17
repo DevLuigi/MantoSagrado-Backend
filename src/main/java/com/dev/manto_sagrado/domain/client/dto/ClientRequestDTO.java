@@ -16,7 +16,6 @@ public class ClientRequestDTO {
     private String email;
     private String password;
     private String name;
-    private String lastName;
     private String cpf;
     private LocalDate birthDate;
     private Gender gender;
@@ -27,7 +26,6 @@ public class ClientRequestDTO {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())
-                .lastName(user.getLastName())
                 .cpf(user.getCpf())
                 .birthDate(user.getBirthDate())
                 .gender(user.getGender())

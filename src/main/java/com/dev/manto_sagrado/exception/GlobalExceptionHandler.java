@@ -66,4 +66,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidAddressTypeException(InvalidAddressTypeException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidClientNameException.class)
+    public ResponseEntity<String> handleInvalidClientNameException(InvalidClientNameException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
 }

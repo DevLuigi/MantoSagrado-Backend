@@ -9,10 +9,7 @@ import com.dev.manto_sagrado.domain.client.dto.ClientRequestDTO;
 import com.dev.manto_sagrado.domain.client.dto.ClientResponseDTO;
 import com.dev.manto_sagrado.domain.client.entity.Client;
 import com.dev.manto_sagrado.domain.client.dto.ClientLoginResponseDTO;
-import com.dev.manto_sagrado.exception.AddressNotFoundException;
-import com.dev.manto_sagrado.exception.ClientNotFoundException;
-import com.dev.manto_sagrado.exception.InvalidAddressTypeException;
-import com.dev.manto_sagrado.exception.InvalidCpfException;
+import com.dev.manto_sagrado.exception.*;
 import com.dev.manto_sagrado.infrastructure.utils.CpfValidator;
 import com.dev.manto_sagrado.repository.AddressRepository;
 import com.dev.manto_sagrado.repository.ClientRepository;
@@ -20,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.naming.InvalidNameException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,6 +50,10 @@ public class ClientService {
 
         if(!CpfValidator.isValid(client.getCpf()))
             throw new InvalidCpfException("CPF inválido");
+
+        if (!client.getName().matches("^[\\p{L}]{3,}\\s[\\p{L}]{3,}$")) {
+            throw new InvalidClientNameException("O nome deve conter 2 palavras com no mínimo 3 letras cada.");
+        }
 
         client.setPassword(encoder.encode(client.getPassword()));
         Client newClient = repository.save(client);
