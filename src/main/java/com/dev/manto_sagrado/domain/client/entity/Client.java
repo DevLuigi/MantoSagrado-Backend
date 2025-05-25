@@ -31,10 +31,6 @@ public class Client {
     @NotNull(message = "Nome deve ser preenchido")
     private String name;
 
-    @Size(min = 3, message = "O sobrenome deve ter no mínimo 3 caracteres")
-    @NotNull(message = "Sobrenome deve ser preenchido")
-    private String lastName;
-
     @NotNull(message = "CPF deve ser preenchido")
     private String cpf;
 
