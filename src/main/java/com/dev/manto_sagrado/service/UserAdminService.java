@@ -7,6 +7,7 @@ import com.dev.manto_sagrado.domain.userAdmin.dto.UserAdminResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.dto.UserLoginResponseDTO;
 import com.dev.manto_sagrado.domain.userAdmin.entity.UserAdmin;
 import com.dev.manto_sagrado.exception.InvalidCpfException;
+import com.dev.manto_sagrado.exception.InvalidEmailException;
 import com.dev.manto_sagrado.exception.UserDeactivatedException;
 import com.dev.manto_sagrado.infrastructure.utils.CpfValidator;
 import com.dev.manto_sagrado.repository.UserAdminRepository;
@@ -34,10 +35,11 @@ public class UserAdminService {
     }
 
     public boolean save(UserAdmin user) {
-        if (repository.findByEmail(user.getEmail()).isPresent()) return false;
+        if (repository.findByEmail(user.getEmail()).isPresent())
+            throw new InvalidEmailException("O e-mail informado já está em uso. Por favor, utilize outro");
 
         if(!CpfValidator.isValid(user.getCpf()))
-            throw new InvalidCpfException("CPF inválido");
+            throw new InvalidCpfException("CPF inválido. Por favor, verifique os dígitos");
 
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
@@ -63,7 +65,7 @@ public class UserAdminService {
         if (!repository.existsById(data.getId())) return Optional.empty();
 
         if(!CpfValidator.isValid(data.getCpf()))
-            throw new InvalidCpfException("CPF inválido");
+            throw new InvalidCpfException("CPF inválido. Por favor, verifique os dígitos");
 
         UserAdmin user = repository.findById(id).get();
         if (!user.getUserGroup().equals(Group.ADMIN)) {

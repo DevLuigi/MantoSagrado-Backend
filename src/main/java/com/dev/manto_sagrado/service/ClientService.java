@@ -49,7 +49,7 @@ public class ClientService {
         if (repository.findByEmail(client.getEmail()).isPresent()) return Optional.empty();
 
         if(!CpfValidator.isValid(client.getCpf()))
-            throw new InvalidCpfException("CPF inválido");
+            throw new InvalidCpfException("CPF inválido. Por favor, verifique os dígitos");
 
         if (!client.getName().matches("^[\\p{L}]{3,}\\s[\\p{L}]{3,}$")) {
             throw new InvalidClientNameException("O nome deve conter 2 palavras com no mínimo 3 letras cada.");
@@ -76,7 +76,7 @@ public class ClientService {
         if (!repository.existsById(data.getId())) return Optional.empty();
 
         if(!CpfValidator.isValid(data.getCpf()))
-            throw new InvalidCpfException("CPF inválido");
+            throw new InvalidCpfException("CPF inválido. Por favor, verifique os dígitos");
 
         Client client = repository.findById(id).get();
 
