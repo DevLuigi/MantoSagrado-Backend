@@ -9,10 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-
 import java.time.Duration;
 
 @ActiveProfiles("test")
@@ -133,6 +130,43 @@ public class UserAdminUITest {
     }
 
     @Test
+    @DisplayName("Deve exibir 'Preencha todos os campos!' quando o usuário deixar campos obrigatórios em branco")
+    void shouldDisplayErrorMessageWhenRequiredFieldsAreEmpty() {
+        driver.get(DEFAULT_URL+"/user/register");
+
+        driver.findElement(By.id("submit")).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("Toastify__toast")
+        ));
+
+        String text = toast.getText();
+        Assertions.assertThat(text).isEqualTo("Preencha todos os campos!");
+    }
+
+    @Test
+    @DisplayName("Deve exibir 'As senhas não são iguais!' quando o usuário inserir senhas diferentes")
+    void shouldDisplayErrorMessageWhenPasswordsDoNotMatch() {
+        driver.get(DEFAULT_URL+"/user/register");
+
+        driver.findElement(By.id("name")).sendKeys("Luigi");
+        driver.findElement(By.id("cpf")).sendKeys("12345678900");
+        driver.findElement(By.id("email")).sendKeys("random951@gmail.com");
+        driver.findElement(By.id("password")).sendKeys("1234");
+        driver.findElement(By.id("confirmPassword")).sendKeys("123");
+        driver.findElement(By.id("select")).sendKeys("a");
+        driver.findElement(By.id("submit")).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.className("Toastify__toast")
+        ));
+
+        String text = toast.getText();
+        Assertions.assertThat(text).isEqualTo("As senhas não são iguais!");
+    }
+
+    @Test
     @DisplayName("Deve exibir 'Registro inserido com sucesso!' ao inserir usuário válido")
     void shouldDisplayRegisterInsertedWithSuccessWhenInsertAValidUser() {
         driver.get(DEFAULT_URL+"/user/register");
@@ -154,7 +188,6 @@ public class UserAdminUITest {
 
         boolean correctText = text.equals("Registro inserido com sucesso!");
         boolean correctUrl = driver.getCurrentUrl().equals(DEFAULT_URL+"/user/management");
-        System.out.println(driver.getCurrentUrl());
 
         Assertions.assertThat(correctText && correctUrl).isEqualTo(true);
     }

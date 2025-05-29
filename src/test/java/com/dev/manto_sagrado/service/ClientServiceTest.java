@@ -93,9 +93,11 @@ class ClientServiceTest {
 
         when(clientRepository.findByEmail("joao@email.com")).thenReturn(Optional.of(client));
 
-        Optional<Client> result = clientService.save(client);
+        assertThatThrownBy(() -> clientService.save(client))
+                .isInstanceOf(InvalidEmailException.class)
+                .hasMessage("O e-mail informado já está em uso. Por favor, utilize outro");
 
-        assertTrue(result.isEmpty());
+        verify(clientRepository, never()).save(any());
     }
 
     @Test
@@ -128,7 +130,7 @@ class ClientServiceTest {
     void testSave_WithInvalidName_ShouldThrowException() {
         Client client = Client.builder()
                 .id(1L)
-                .name("Jo") // nome inválido
+                .name("Jo")
                 .email("jo@email.com")
                 .cpf("89489675091")
                 .password("senha123")
