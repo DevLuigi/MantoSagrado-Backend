@@ -3,7 +3,6 @@ package com.dev.manto_sagrado.service;
 import com.dev.manto_sagrado.domain.address.Enum.AddressDefaultStatus;
 import com.dev.manto_sagrado.domain.address.Enum.AddressType;
 import com.dev.manto_sagrado.domain.address.dto.AddressRequestDTO;
-import com.dev.manto_sagrado.domain.address.dto.AddressResponseDTO;
 import com.dev.manto_sagrado.domain.address.entity.Address;
 import com.dev.manto_sagrado.domain.client.dto.ClientRequestDTO;
 import com.dev.manto_sagrado.domain.client.dto.ClientResponseDTO;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.naming.InvalidNameException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,14 +44,13 @@ public class ClientService {
     }
 
     public Optional<Client> save(Client client) {
-        if (repository.findByEmail(client.getEmail()).isPresent()) return Optional.empty();
+        if (repository.findByEmail(client.getEmail()).isPresent())
+            throw new InvalidEmailException("O e-mail informado já está em uso. Por favor, utilize outro");
 
         if(!CpfValidator.isValid(client.getCpf()))
-            throw new InvalidCpfException("CPF inválido");
+            throw new InvalidCpfException("CPF inválido. Por favor, verifique os dígitos");
 
-        if (!client.getName().matches("^[\\p{L}]{3,}\\s[\\p{L}]{3,}$")) {
-            throw new InvalidClientNameException("O nome deve conter 2 palavras com no mínimo 3 letras cada.");
-        }
+        validateName(client.getName());
 
         client.setPassword(encoder.encode(client.getPassword()));
         Client newClient = repository.save(client);
@@ -76,7 +73,7 @@ public class ClientService {
         if (!repository.existsById(data.getId())) return Optional.empty();
 
         if(!CpfValidator.isValid(data.getCpf()))
-            throw new InvalidCpfException("CPF inválido");
+            throw new InvalidCpfException("CPF inválido. Por favor, verifique os dígitos");
 
         Client client = repository.findById(id).get();
 
@@ -89,6 +86,7 @@ public class ClientService {
 
     public Client updateAll(ClientRequestDTO data, Client oldClient) {
         Client clientUpdated = ClientRequestDTO.newUser(data);
+        validateName(clientUpdated.getName());
         clientUpdated.setEmail(oldClient.getEmail());
         clientUpdated.setPassword(encoder.encode(data.getPassword()));
         return clientUpdated;
@@ -152,5 +150,15 @@ public class ClientService {
 
         repository.deleteById(clientId);
         return true;
+    }
+
+    private static void validateName(String name) {
+        String[] palavras = name.trim().split("\\s+");
+        if (palavras.length < 2)
+            throw new InvalidClientNameException("O nome deve conter no mínimo 2 palavras com 3 letras cada.");;
+
+        long palavrasValidas = java.util.Arrays.stream(palavras).filter(p -> p.length() >= 3).count();
+        if (palavrasValidas < 2)
+            throw new InvalidClientNameException("O nome deve conter no mínimo 2 palavras com 3 letras cada.");;
     }
 }
