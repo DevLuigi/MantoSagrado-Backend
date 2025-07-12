@@ -5,7 +5,7 @@
 
 
 <div align="center">
-   <img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=RED&style=for-the-badge" alt="badge-desenvolvimento"/>
+   <img src="http://img.shields.io/static/v1?label=STATUS&message=FINALIZADO&color=RED&style=for-the-badge" alt="badge-finalizado"/>
 </div>
 
 <br>
@@ -16,13 +16,11 @@
 
 - [Funcionalidades](#funcionalidades)
 
-- [Aplicação](#aplicação)
-
 - [Ferramentas utilizadas](#ferramentas-utilizadas)
 
 - [Acesso ao projeto](#acesso-ao-projeto)
 
-- [Abrir e rodar o projeto](#abrir-e-rodar-o-projeto)
+- [Como rodar o projeto](#como-rodar-o-projeto)
 
 - [Desenvolvedores](#desenvolvedores)
 
@@ -39,11 +37,27 @@ Este projeto nos permite explorar tecnologias modernas para criação de aplica�
 
 ## Funcionalidades
 
-:heavy_check_mark: `Funcionalidade 1:` Colocar funcionalidade.
+:heavy_check_mark: `Funcionalidade 1:` CRUD de produtos.
 
-:heavy_check_mark: `Funcionalidade 2:` Colocar funcionalidade.
+:heavy_check_mark: `Funcionalidade 2:` CRUD de usuários Administradores/Estoquistas.
 
-:heavy_check_mark: `Funcionalidade 3:` Colocar funcionalidade.
+:heavy_check_mark: `Funcionalidade 3:` Controle de estoque de produtos.
+
+:heavy_check_mark: `Funcionalidade 4:` Manutenção das vendas dos clientes.
+
+:heavy_check_mark: `Funcionalidade 5:` Login de Administradores/Estoquistas.
+
+:heavy_check_mark: `Funcionalidade 6:` CRUD de clientes (Cadastro do endereço utilizando API externa).
+
+:heavy_check_mark: `Funcionalidade 7:` Login de clientes.
+
+:heavy_check_mark: `Funcionalidade 8:` Carrinho de compras.
+
+:heavy_check_mark: `Funcionalidade 9:` Calculo do Frete (Utilizando API externa).
+
+:heavy_check_mark: `Funcionalidade 10:` Checkout do carrinho de compras.
+
+:heavy_check_mark: `Funcionalidade 11:` Lista de pedidos realizados dos clientes e resumo deles.
 
 <br>
 
@@ -58,7 +72,45 @@ Este projeto nos permite explorar tecnologias modernas para criação de aplica�
 
 ## Acesso ao projeto
 
-Você pode [acessar o código fonte do projeto back-end](https://github.com/DevLuigi/MantoSagrado-Backend) ou [acessar o código fonte do projeto front-end](https://github.com/DevLuigi/MantoSagrado-Frontend).
+Você pode [acessar o código fonte do projeto front-end](https://github.com/DevLuigi/MantoSagrado-Frontend).
+
+<br>
+
+## Como rodar o projeto
+
+Para executar este projeto localmente, siga os passos abaixo:
+
+1 - Clone o repositório:
+~~~bash
+  git clone https://github.com//DevLuigi/MantoSagrado-Backend.git
+~~~
+
+2 - Acesse o diretório do projeto:
+~~~bash
+  cd substitua/pelo/diretorio/onde/foi/clonado/MantoSagrado-Backend
+~~~
+
+3 - Configure as variáveis de ambiente:
+Altere o arquivo application.properties no diretório src/main/resources, e defina as configurações do banco de dados e demais variáveis exigidas pelo projeto. Exemplo básico:
+~~~bash
+  spring.datasource.url=jdbc:postgresql://localhost:5432/seu_banco
+  spring.datasource.username=seu_usuario
+  spring.datasource.password=sua_senha
+  spring.jpa.hibernate.ddl-auto=update
+~~~
+
+4 - Compile o projeto com Maven:
+~~~bash
+  ./mvnw clean install
+~~~
+
+5 - Execute a aplicação:
+~~~bash
+  ./mvnw spring-boot:run
+~~~
+
+6 - Acesse a API:
+A aplicação será executada em http://localhost:8080 (por padrão). Você pode testar os endpoints utilizando ferramentas como Postman, Insomnia ou via cURL.
 
 <br>
 
