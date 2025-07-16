@@ -24,9 +24,9 @@ public class UserAdminUITest {
         driver = new ChromeDriver();
     }
 
-    @AfterAll
-    static void tearDown() {
-        driver.quit();
+    @AfterEach
+    void tearDown() {
+        driver.close();
     }
 
     @Test

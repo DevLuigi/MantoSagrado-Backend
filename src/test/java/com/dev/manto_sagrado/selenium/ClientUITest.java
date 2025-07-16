@@ -2,6 +2,7 @@ package com.dev.manto_sagrado.selenium;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,11 @@ public class ClientUITest {
     void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+    }
+
+    @AfterEach
+    void tearDown() {
+        driver.close();
     }
 
     @Test
