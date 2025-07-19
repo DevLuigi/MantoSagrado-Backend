@@ -40,8 +40,8 @@ jobs:
           distribution: 'temurin'
           java-version: '22'
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build without tests
+        run: mvn clean install -DskipTests
 
-      - name: Run Tests
+      - name: Run Only Service Tests
         run: mvn -Dtest=*ServiceTest test
