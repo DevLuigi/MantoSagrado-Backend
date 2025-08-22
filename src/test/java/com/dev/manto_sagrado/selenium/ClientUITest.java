@@ -2,6 +2,7 @@ package com.dev.manto_sagrado.selenium;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,9 +10,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 
 @ActiveProfiles("test")
@@ -21,9 +27,23 @@ public class ClientUITest {
     WebDriver driver;
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+
+        Path tempProfile = Files.createTempDirectory("selenium-profile-");
+        options.addArguments("--user-data-dir=" + tempProfile.toAbsolutePath().toString());
+
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(options);
+    }
+
+    @AfterEach
+    void tearDown() {
+        driver.quit();
     }
 
     @Test
