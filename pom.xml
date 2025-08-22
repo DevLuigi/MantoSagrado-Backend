@@ -14,7 +14,7 @@
 
 	<groupId>com.dev</groupId>
 	<artifactId>manto-sagrado</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>manto-sagrado</name>
 	<description>Demo project for Spring Boot</description>
 
