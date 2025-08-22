@@ -1,0 +1,37 @@
+name: manto-sagrado
+services:
+  mysql:
+    container_name: mysql-container
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_DATABASE: ${SPRING_DATASOURCE_DATABASE}
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - manto-sagrado-network
+
+  spring-boot-app:
+    container_name: manto-sagrado-app-container
+    image: devluigi1910/manto-sagrado
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: ${SPRING_DATASOURCE_URL}
+      DB_USER: ${SPRING_DATASOURCE_USERNAME}
+      DB_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      TOKEN: ${SPRING_DATASOURCE_TOKEN}
+      EMAIL: ${SPRING_DATASOURCE_EMAIL}
+    networks:
+      - manto-sagrado-network
+
+volumes:
+  mysql:
+
+networks:
+  manto-sagrado-network:
+    driver: bridge
